@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${session.user.getName()}+'的个人主页'"></title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
+  <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+</head>
+<style>
+    .bt_box{
+        width: 100%;
+        text-align: center;
+        font-size: 14px;
+        padding:50px;
+    }
+    .bt_box .gb{
+        display:inline-block;
+        width:120px;
+        height:35px;
+        border-radius: 8px;
+        background:#f3f3f3;
+        color:#444;
+        line-height: 35px;
+    }
+    .bt_box .queren{
+        display: inline-block;
+        width:120px;
+        height:35px;
+        border-radius: 8px;
+        background:#4B8BF5;
+        color:#fff;
+        line-height: 35px;
+        border-width: 0px;
+    }
+    .preview{
+        width: 150px;
+    }
+    .preview img{
+        margin: 5px 0;
+        width: 100%;
+    }
+</style>
+<script type="application/javascript">
+
+</script>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid main" style="background-image: url('/images/snow_bk.jpg');background-size: 100% 100%;">
+    <div style="min-height:620px;width:980px;margin:0 auto;">
+         <div style="width:100%;height:200px;background-color: gainsboro;opacity: 0.5;margin-bottom:50px">
+              <span style="float: right;margin: 5px;cursor: pointer" class="glyphicon glyphicon-wrench"></span>
+         </div>
+         <div style="height:120px;background: #F5F7FA;margin: 0 auto;border-style: solid;border-width: 0 1px;border-color: #8FC0D3;">
+              <div style=" position: relative;float: left;width:600px;height:100%">
+                  <div style="width: 150px;height:150px;position: absolute;top: -65px; left: 17px;">
+                     <a style="display: block;text-decoration: none;background-color:white;height: 150px;padding: 5px;width: 150px;pointer-events: cursor;">
+                         <img th:src="${session.user.avatarUrl}" style=" border-radius: 4px;width:140px;height: 140px ;">
+                     </a>
+                  </div>
+                  <div style="float: left;min-width: 400px;height:120px;margin-left: 170px">
+                      <div style="cursor: pointer;position: absolute;top:-39px;width:80px;height:25px;border:1px solid #3e89fa; background-color: #fff;padding: 2px 10px;" id="bianji">编辑资料</div>
+                      <div style="width: 100%;height: 36px;margin-left: 10px">
+                          <div style="margin-top: 10px;font-size: 18px;line-height: 26px;float: left">
+                              <span th:text="${session.user.getName()}"></span>
+                          </div>
+                      </div>
+                       <div style="height: 30px;margin-top: 20px;color: #797C80;">
+                          <ul style="    list-style: none;">
+                              <li style="float: left;border-color: #CCC;border-style: solid; border-width: 0 1px 0 0;margin: 0 10px 2px 9px;padding-right: 15px" th:text="${session.user.getName()}"></li>
+                               <li style="float: left;border-color: #CCC;border-style: solid; border-width: 0 1px 0 0;margin: 0 10px 2px 9px;padding-right: 15px"><a href="/profile/questions" target="_blank">发帖</a><span th:text="${totalCount}"></span></li>
+                               <li style="float: left;border-color: #CCC;border-style: solid;border-width: 0 1px 0 0;margin: 0 10px 2px 9px;padding-right: 15px"><a href="/profile/attentioned" target="_blank">粉丝</a><span th:text="${attentionmeCount}"></span></li>
+                               <li style="float: left;margin: 0 10px 2px 9px;"><a href="/profile/attention" target="_blank">关注</a><span th:text="${meattentionCount}"></span></li>
+                          </ul>
+                      </div>
+                  </div>
+              </div>
+              <div style="float: left;width:300px;height:100%; padding: 10px;">
+                  积分
+              </div>
+         </div>
+         <div style="position:relative;min-height:230px;background: #F5F7FA;margin: 0 auto;border-style: solid;border-width: 1px;border-color: #CCC;">
+             <div style="width:700px;height:100%;border-color: #CCC;border-style: solid;border-width: 0 1px 0 0;">
+                 <ul class="nav nav-tabs" th:if="${section=='home'}">
+                     <li role="presentation" class="active"><a href="/userhome/home">我的主页</a></li>
+                     <li role="presentation"><a href="/userhome/notification">收到回复</a></li>
+                     <li role="presentation"><a href="/userhome/collect">我的收藏</a></li>
+                 </ul>
+                 <ul class="nav nav-tabs" th:if="${section=='notification'}">
+                     <li role="presentation"><a href="/userhome/home">我的主页</a></li>
+                     <li role="presentation" class="active"><a href="/userhome/notification">收到回复</a></li>
+                     <li role="presentation"><a href="/userhome/collect">我的收藏</a></li>
+                 </ul>
+                 <ul class="nav nav-tabs" th:if="${section=='collect'}">
+                     <li role="presentation"><a href="/userhome/home">我的主页</a></li>
+                     <li role="presentation"><a href="/userhome/notification">收到回复</a></li>
+                     <li role="presentation" class="active"><a href="/userhome/collect">我的收藏</a></li>
+                 </ul>
+                 <div style="max-height: 480px;overflow-y:scroll;min-height: 190px; padding: 5px;" th:if="${section=='home'}">
+                    <span th:if="${questionDTOList.size()!=0}">
+                         <div class="media" th:each="question : ${questionDTOList}">
+                         <div class="media-left">
+                              <a class="img_container" th:href="@{'/otheruserhome/tie/'+ ${question.user.id}}" style="border-radius: 4px;display: block;text-decoration: none;background-color: white;height: 50px;cursor: pointer; width: 50px;">
+                                  <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" style="width: 50px;height: 50px">
+                                  <div class="mask" th:text="${question.user.name}"></div>
+                               </a>
+                         </div>
+                         <div class="media-body">
+                             <h5 class="media-heading">
+                                 <a th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a>
+                             </h5>
+                             <span class="text-desc">
+                             <span th:text="${question.commentCount}"></span> 个回复 •
+                                 <!--对-->
+                             <span th:text="${question.viewCount}"></span> 次浏览 •
+                             <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>•
+                                <a th:href="@{'/publish/'+${question.id}}" class="community-menu" th:if="${session.user!=null&&session.user.id==question.creator}">
+                                  <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                                </a>
+                             </span>
+                         </div>
+                     </div>
+                    </span>
+                    <div th:if="${questionDTOList.size()==0}" style="text-align: center;margin-top: 30px;">
+                        空空如也~
+                    </div>
+                 </div>
+                 <div style="min-height: 190px; padding: 5px;" th:if="${section=='notification'}">
+                   <span th:if="${pagination.data!=null}">
+                     <div class="media" th:each="notification : ${pagination.data}">
+                         <div class="media-body" style="height: 0;">
+                            <p class="media-heading">
+                               <span th:text="${notification.notifierName+' '+notification.typeName+' '}"></span>
+                               <a th:href="@{'/notification/'+ ${notification.id}}" th:text="${notification.outerTitle}"></a>
+                               <span class="label label-danger" th:if="${notification.status==0}">未读</span>
+                            </p>
+                         </div>
+                     </div>
+                   </span>
+                   <div th:if="${pagination.data==null}" style="margin-top: 30px;text-align: center">
+                         空空如也~
+                   </div>
+                 </div>
+                 <div style="min-height: 190px; padding: 5px;" th:if="${section=='collect'}">
+                   <span th:if="${pagination.data.size()!=0}">
+                     <div class="media" th:each="collect : ${pagination.data}">
+                         <div class="media-left">
+                             <a class="img_container" th:href="@{'/otheruserhome/'+${collect.user.getId()}}"  style="border-radius: 4px;display: block;text-decoration: none;background-color: white;height: 50px;cursor: pointer; width: 50px;">
+                                 <img class="media-object img-rounded" th:src="${collect.user.avatarUrl}" style="width: 50px;height: 50px">
+                                 <div class="mask" th:text="${collect.user.name}"></div>
+                             </a>
+                         </div>
+                         <div class="media-body">
+                             <h5 class="media-heading">
+                                 <a th:href="@{'/question/'+ ${collect.question.id}}" th:text="${collect.question.title}"></a>
+                             </h5>
+                             <span class="text-desc">
+                                <span th:text="${collect.question.commentCount}"></span> 个回复 •
+                                 <!--对-->
+                                <span th:text="${collect.question.viewCount}"></span> 次浏览 •
+                                <span th:text="${#dates.format(collect.question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>•
+                                <a th:href="@{'/publish/'+${collect.question.id}}" class="community-menu" th:if="${session.user!=null&&session.user.id==collect.question.creator}">
+                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
+                                </a>
+
+                             </span>
+                         </div>
+                         <div class="media-right" th:text="${#dates.format(collect.time,'yyyy-MM-dd')}"></div>
+                     </div>
+                   </span>
+                     <div th:if="${pagination.data.size()==0}" style="margin-top: 30px;text-align: center">
+                         空空如也~
+                     </div>
+                 </div>
+             </div>
+             <div style="position:absolute;width:270px;height:100%;top: 0;right: 0;">
+                 <div>222</div>
+                 <div></div>
+             </div>
+         </div>
+    </div>
+</div>
+<div id="touxiang" style="width:100%;height:350px;position:fixed;top:100px;display:none;border-radius: 5px;padding:40px;">
+    <div style=" background: rgb(100,100,100);opacity:0.8;width:400px;margin:0 auto;height:100%;position:relative;">
+        <form id="uploadForm" action="/file/uploadImg" method="post" name="tou" enctype="multipart/form-data">
+            <div class="preview" style="margin:0 auto;">
+                <input type="file" id="uploadImg" onchange="xmTanUploadImg(this)" name="uploadImg" style="margin-top:10px;">
+            </div>
+            <center style="height:120px"><img src="" alt="" id="selectImg" style="width:100px;height:100px;margin-top:20px;"></center>
+            <div class="bt_box">
+                <a class="gb" id="gb">关闭</a>
+                <input type="submit" value="保存头像" class="queren">
+            </div>
+        </form>
+        <div id="close" style="position:absolute;right:0px;top:0px;">
+            <span class="glyphicon glyphicon-remove" style="margin: 3px;"></span>
+        </div>
+    </div>
+</div>
+<div th:insert="~{footer :: foot}"></div>
+<script>
+    var touxiang=document.getElementById('touxiang'),
+        close=document.getElementById('close'),
+        bianji=document.getElementById('bianji'),
+        gb=document.getElementById('gb');
+
+    bianji.onclick = function() {
+        touxiang.style.display = "block";
+    };
+    close.onclick = function() {
+        touxiang.style.display = "none";
+    };
+    gb.onclick = function() {
+        touxiang.style.display = "none";
+    };
+    function xmTanUploadImg(obj) {
+        var file = obj.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function (e) {
+            var img = document.getElementById("selectImg");
+            var tou = document.getElementById("tou");
+            var tou1 = document.getElementById("tou1");
+            img.src = e.target.result;
+            /*tou.src=e.target.result;
+            tou1.src=e.target.result;*/
+        };
+    }
+</script>
+</body>
+</html>

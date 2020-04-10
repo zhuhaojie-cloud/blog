@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>私信</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+</head>
+<style>
+</style>
+
+<script th:inline="javascript">
+   //设置聊天东条;
+
+   Date.prototype.Format = function (fmt) {
+       var o = {
+           "M+": this.getMonth() + 1, //月份
+           "d+": this.getDate(), //日
+           "H+": this.getHours(), //小时
+           "m+": this.getMinutes(), //分
+           "s+": this.getSeconds(), //秒
+           "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+           "S": this.getMilliseconds() //毫秒
+       };
+       if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+       for (var k in o)
+           if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+       return fmt;
+   }
+    var websocket = null;
+    var i=0;
+    //判断当前浏览器是否支持WebSocket
+    if ('WebSocket' in window) {
+        //2,123 2登录用户标识,123会话id
+        //[[${session.usr}]]获取session的用户标识
+        var url = "ws://" + window.location.host +"/webSocketOneToOne/"+[[${session.user.id}]]+",123"
+        websocket = new WebSocket(url);
+    } else {
+        alert('当前浏览器 Not support websocket')
+    }
+    //连接发生错误的回调方法
+    websocket.onerror = function() {
+        //setMessageInnerHTML("WebSocket连接发生错误");
+    };
+    websocket.onopen = function() {
+        //连接成功建立的回调方法
+       // setMessageInnerHTML("WebSocket连接成功");
+    }
+    //接收到消息的回调方法
+    websocket.onmessage = function(event) {
+        console.log("回调信息",event.data)
+        if(event.data.substr(0, 5)==".,?*."){
+            setMessageInnerHTML1(event.data.substr(5));
+        }else{
+            setMessageInnerHTML(event.data);
+        }
+    }
+    //连接关闭的回调方法
+    websocket.onclose = function() {
+      //  setMessageInnerHTML("WebSocket连接关闭");
+    }
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function() {
+        closeWebSocket();
+    }
+    //将对方消息显示在网页上
+    function setMessageInnerHTML1(innerHTML) {
+        var html =' <div style="height:50px;padding: 10px">\n' +
+            '                <div style="float:left;width: 50px;height: 50px;" >\n' +
+            '                    <img style="width: 50px;height: 50px;border-radius: 50%" name="img">\n' +
+            '                </div>\n' +
+            '                <div style="float:left;height:50px;margin-left:10px" >\n' +
+            '                    <div style="padding:2px;max-width: 400px;min-height: 21px;background: #d7e9ff;border-radius: 4px; line-height: 21px; font-size: 14px;height: 30px;" name="mes"></div>\n' +
+            '                    <span style="font-size:10px;">2020-01-02</span>\n' +
+            '\n' +
+            '                </div>\n' +
+            '            </div>'
+
+        document.getElementById('message').innerHTML += html;
+        document.getElementsByName('mes')[i].innerHTML +=innerHTML;
+        document.getElementsByName("img")[i].src =[[${otherUser.avatarUrl}]];//对方的头像
+        i++;
+    }
+    //将自己消息显示在网页上
+    function setMessageInnerHTML(innerHTML) {
+        // var img=session.user.avatarUrl;
+        var dt = new Date();
+        var time2 = new Date().Format("yyyy-MM-dd HH:mm");
+        var html =' <div style="height:70px;padding: 10px">\n' +
+            '                <div style="float:right;width: 50px;height: 50px;" >\n' +
+            '                    <img style="width: 50px;height: 50px;border-radius: 50%" name="img">\n' +
+            '                </div>\n' +
+            '                <div style="float:right;height:50px;margin-right:10px" >\n' +
+            '                    <div style="padding:2px;max-width: 400px;background: #d7e9ff;border-radius: 4px; line-height: 21px; font-size: 14px;height: 35px;" name="mes"></div>\n' +
+            '                    <span style="font-size:10px;" name="time"></span>\n' +
+            '\n' +
+            '                </div>\n' +
+            '            </div>'
+        document.getElementById('message').innerHTML += html;
+        document.getElementsByName('mes')[i].innerHTML +=innerHTML;
+        document.getElementsByName('time')[i].innerHTML +=time2;
+        document.getElementsByName("img")[i].src =[[${session.user.avatarUrl}]];
+        $('.message').scrollTop($('.message')[0].scrollHeight);
+        i++;
+    }
+    //关闭WebSocket连接
+    function closeWebSocket() {
+        websocket.close();
+    }
+    //发送消息
+    function send() {
+        var text=document.getElementById('text');
+        var message =text.value;
+        //message作为发送的信息，role作为发送的对象标识，socketId是此次会话的标识
+        text.value="";
+        websocket.send(JSON.stringify({'message':message,'role':document.getElementById('toname').value,'socketId':"123"}));
+
+    }
+</script>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div style="width:960px;height:641px;margin:0 auto;background: gainsboro">
+    <div style="float: left;width: 178px;height: 100%;">
+        <div style="width:100px;margin: 0 auto;padding-top: 10px;height: 40px;">私信消息</div>
+        <div style="width:100%;height: 45px;background:#01a252; padding-top: 10px;">
+            <div style="width:50%;float: left;height: 100%;border-bottom: 2px solid;padding-left:10px;">
+                <span class="glyphicon glyphicon-envelope" aria-hidden="true" style="font-size:20px; "></span>
+                <span style="font-size: 13px;cursor: pointer">私信纪录</span>
+            </div>
+            <div style="width:50%;float: left;height: 100%;border-bottom: 2px solid;font-size: 18px; padding-left: 10px;">
+                <span class="glyphicon glyphicon-user" aria-hidden="true" style="font-size: 20px; "></span>
+                <sapn style="font-size: 13px;cursor: pointer">联系人</sapn>
+            </div>
+        </div>
+        <div style="width: 100%;height:556px;background: #4d4d4d">
+            <span>
+                <div style="position: absolute; width: 178px; height: 45px;background: #ccc; opacity: 0.4;"></div>
+            </span>
+            <span th:each="contactDTO : ${contactDTOList}">
+            <div style="background:#5bc0de;height:45px;padding: 8px;cursor: pointer">
+                <input id="toname" type="text" style="display: none" th:value="${contactDTO.getUser2().getId()}"/>
+                <a id="contactuser" th:href="@{${contactDTO.getUser2().getId()}}">
+                    <img th:src="${contactDTO.getUser2().avatarUrl}" style="width: 30px;height: 30px;border-radius: 50%;float: left">
+                    <span th:text="${contactDTO.getUser2().getName()}" style="float: left;margin: 4px 10px;color:#fff"></span>
+                    <span class="badge" style="color: #9c3328;float: right" th:text="${contactDTO.flagreadnumber}" th:if="${contactDTO.flagreadnumber}!=0"></span>
+                </a>
+            </div>
+            </span>
+        </div>
+    </div>
+    <div style="float: left;width:782px;height: 100%">
+        <div style="width:782px;height: 40px; padding-top: 10px;background: #5bc0de">
+            <span class="glyphicon glyphicon-wrench" style="cursor: pointer">设置</span>
+        </div>
+        <div th:text="'正在与'+${otherUser.getName()}+'用户对话中'" style="width:782px;margin: 0 auto;padding-top: 10px;height:45px;background: #222222;color: #fff;text-align: center;"></div>
+        <div style="width:782px;height:440px;overflow-y: scroll" id="message" class="message">
+           <span th:each="message : ${messages}">
+            <div style="height:70px;padding: 10px" th:if="${message.fromuser!=session.user.id}">
+             <div style="float:left;width: 50px;height: 50px;" >
+                <img style="width: 50px;height: 50px;border-radius: 50%" th:src="${otherUser.avatarUrl}">
+             </div>
+             <div style="float:left;height:50px;margin-left:10px" >
+                <div style="padding:2px;max-width: 400px;background: #d7e9ff;border-radius: 4px; line-height: 21px; font-size: 14px;height: 35px;" th:text="${message.getMsg()}"></div>
+                <span style="font-size:10px" th:text="${#dates.format(message.time,'yyyy-MM-dd HH:mm')}"></span>
+            </div>
+           </div>
+
+            <div style="height:70px;padding: 10px" th:if="${message.fromuser==session.user.id}">
+                <div style="float:right;width: 50px;height: 50px;" >
+                    <img style="width: 50px;height: 50px;border-radius: 50%" th:src="${session.user.avatarUrl}">
+                </div>
+                <div style="float:right;height:50px;margin-right:10px" >
+                    <div style="padding:2px;max-width: 400px;background: #d7e9ff;border-radius: 4px; line-height: 21px; font-size: 14px;height: 35px;" th:text="${message.getMsg()}"></div>
+                    <span style="font-size:10px" th:text="${#dates.format(message.time,'yyyy-MM-dd HH:mm')}"></span>
+                </div>
+            </div>
+          </span>
+        </div>
+        <div style="width:782px;height:115px">
+            <textarea type="text" id="text" style=" width: 782px;height: 85px;"></textarea>
+            <div>
+                <button onclick="send()" style="float: right">发送</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{footer :: foot}"></div>
+<script>
+    $('.message').scrollTop($('.message')[0].scrollHeight);
+</script>
+</body>
+</html>

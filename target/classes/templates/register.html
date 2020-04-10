@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>注册</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js" type="application/javascript"></script>
+  <script src="/js/bootstrap.js" type="application/javascript"></script>
+    <script src="/js/community.js" type="application/javascript"></script>
+</head>
+<script type="application/javascript">
+    window.onload=function () {
+        var section2 = $('#section2').val();//利用input获取后台model里的值
+        if (section2 == "login") {
+            $('#login').addClass("active");
+        }
+    }
+    function login(){
+        document.getElementById("form1").submit();
+    }
+</script>
+<body>
+<input th:value="${section2}" style="display: none" id="section2">
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid main" style="background-image: url('/images/bg/bg1.jpg');background-size: 100% 100%;">
+    <div  style="padding-top: 25px;width: 80px; height: 140px;margin: 0 auto;">
+        <h1>注册</h1>
+    </div>
+    <div class="row" style="height: 465px">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+           <div style="width:80%;margin:0 auto;">
+               <form method="get" action="/register">
+               <div style="width:60%;margin:0 auto;min-width: 500px">
+                <div style="padding-top: 20px;">
+                   <input type="text" placeholder="输入昵称" name="userName" maxlength="50" style="width: 100%;border: 1px solid #ddd;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
+    height: 40px;
+    vertical-align: middle;
+    border-radius: 4px;">
+                </div>
+                <div style="padding-top: 20px;">
+                    <input type="password" placeholder="输入密码" name="userPassword" style="width: 100%;border: 1px solid #ddd;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
+    height: 40px;
+    vertical-align: middle;
+    border-radius: 4px;">
+                </div>
+                <div class="row" style="padding-top:20px">
+                    <div class="col-lg-6" style="width: 100%;">
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                   <button type="button" style="height:40px" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">中国大陆 <span class="caret"></span></button>
+                                   <ul class="dropdown-menu">
+                                       <li><a href="#">中国大陆</a></li>
+                                       <li><a href="#">中国香港</a></li>
+                                       <li><a href="#">中国澳门</a></li>
+                                       <li><a href="#">中国台湾</a></li>
+                                   </ul>
+                               </div><!-- /btn-group -->
+                               <input name="userPhone" type="text" class="form-control" aria-label="输入手机号" style="height:40px">
+                           </div><!-- /input-group -->
+                       </div><!-- /.col-lg-6 -->
+                 </div><!-- /.row -->
+                <div class="row" style="padding-top:20px">
+                       <div class="col-lg-6" style="width:100%">
+                           <div class="input-group">
+                               <input type="text" class="form-control" placeholder="请输入验证码" style="height:40px">
+                               <span class="input-group-btn">
+                               <button class="btn btn-default" style="height:40px" type="button">获取验证码</button>
+                            </span>
+                           </div><!-- /input-group -->
+                       </div><!-- /.col-lg-6 -->
+                 </div><!-- /.row -->
+                   <div class="btn-group" role="group" style="  margin-top: 20px;width: 100%;">
+                       <button type="submit" class="btn btn-default" style="width: 100%;">注册</button>
+                   </div>
+            </div>
+               </form>
+
+            <div style="padding-top: 20px; width: 60%; margin: 0 auto;">
+                <a href="/userlogin" style="float:right;">
+                    <span style="color: #ffffec">已有账号直接登录</span>
+                </a>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div th:insert="~{footer :: foot}"></div>
+</body>
+</html>

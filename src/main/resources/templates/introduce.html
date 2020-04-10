@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+     <form action="/introduce" method="get">
+         <input type="text" name="qq">
+         <input type="text" name="text">
+         <button type="submit">发送</button>
+     </form>
+     <form id="file_form" action="/daoruExcel" enctype="multipart/form-data" method="post" style="width:50%;height:80px;float:right;">
+         <p> 导入excel表数据：</p>
+         <div>
+             <input type="file" name="file1" id="file1"/>
+             <input type="submit" value="文件上传" id='upFile-btn'>
+         </div>
+     </form>
+</body>
+</html>
