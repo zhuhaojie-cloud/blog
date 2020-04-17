@@ -20,9 +20,9 @@ public class AliyunOSSUtil {
         logger.info("------OSS文件上传开始--------"+file.getName());
         String endpoint="oss-cn-beijing.aliyuncs.com";
         System.out.println("获取到的Point为:"+endpoint);
-        String accessKeyId="LTAI4FxBXNjSFrfKUSisLVb8";
-        String accessKeySecret="OnEC7tnqmi8QNLfQttNM0BTCWOgqJ6";
-        String bucketName="zhuhaojie";
+        String accessKeyId="你的accessKeyId";
+        String accessKeySecret="你的accessKeySecret";
+        String bucketName="模板名";
         String fileHost="file";
         SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
         String dateStr=format.format(new Date());
