@@ -14,7 +14,7 @@ public class AliyunSmsUtil {
         send("18184065263","250131");
     }*/
         public static void send(String phone,String key) {
-            DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAI4FxBXNjSFrfKUSisLVb8", "OnEC7tnqmi8QNLfQttNM0BTCWOgqJ6");
+            DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "你的。。。", "你的。。。");
             IAcsClient client = new DefaultAcsClient(profile);
             CommonRequest request = new CommonRequest();  //组装请求对象
             request.setMethod(MethodType.POST);
@@ -24,7 +24,7 @@ public class AliyunSmsUtil {
             request.putQueryParameter("RegionId", "cn-hangzhou");
             request.putQueryParameter("PhoneNumbers", phone);
             request.putQueryParameter("SignName", "zhuhaojie博客");
-            request.putQueryParameter("TemplateCode", "SMS_187560256");
+            request.putQueryParameter("TemplateCode", "模板id");
             request.putQueryParameter("TemplateParam", "{code:"+key+"}");
             try {
                 CommonResponse response = client.getCommonResponse(request);
