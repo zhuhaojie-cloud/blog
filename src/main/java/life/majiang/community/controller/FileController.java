@@ -77,7 +77,7 @@ public class FileController {
             String uploadUrl = aliyunOSSUtil.upLoad(newFile);
             FileDTO fileDTO = new FileDTO();
             fileDTO.setSuccess(1);
-            fileDTO.setUrl("https://zhuhaojie.oss-cn-beijing.aliyuncs.com/"+uploadUrl);
+            fileDTO.setUrl("地址"+uploadUrl);
             return fileDTO;
         } catch (Exception ex) {
            // ex.printStackTrace();
@@ -150,7 +150,7 @@ public class FileController {
         file.transferTo(newFile);
         // 上传到OSS
         String uploadUrl = aliyunOSSUtil.upLoad(newFile);
-        user.setAvatarUrl("https://zhuhaojie.oss-cn-beijing.aliyuncs.com/"+uploadUrl);
+        user.setAvatarUrl("地址"+uploadUrl);
         userMapper.updateByPrimaryKey(user);
         return  "redirect:/userhome/home/";
     }
