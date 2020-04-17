@@ -22,12 +22,12 @@ public class SendqqMail {
         Authenticator authenticator = new Authenticator() {
             @Override
             public PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("1640085377@qq.com","rkqzdwcdqjoncjhf");
+                return new PasswordAuthentication("你的qq@qq.com","id");
             }
         };        
         Session session = Session.getDefaultInstance(props, authenticator);
         Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("1640085377@qq.com"));
+        message.setFrom(new InternetAddress("你的qq@qq.com"));
         message.setRecipient(RecipientType.TO, new InternetAddress(people));
         message.setSubject(title);
         String str =password;
